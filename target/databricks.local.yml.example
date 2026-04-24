@@ -1,0 +1,26 @@
+# Local override for the target bundle. Copy this to databricks.local.yml and edit.
+# databricks.local.yml is gitignored so your values stay local.
+#
+# Anything you set here overrides databricks.yml.
+
+variables:
+  source_catalog:
+    default: "my_source_catalog"
+  target_catalog:
+    default: "my_target_catalog"
+  source_schema:
+    default: "my_source_schema"
+  target_schema:
+    default: "my_target_schema_migrated"
+  model_names:
+    default: "my_model_a,my_model_b"
+  export_volume:
+    default: "model_exports"
+  import_volume:
+    default: "model_imports"
+
+targets:
+  dev:
+    workspace:
+      profile: my-databricks-profile
+      host: https://adb-XXXXXXXXXXXXXXXX.X.azuredatabricks.net

@@ -1,0 +1,45 @@
+# Target cleanup: clear import volume and delete all registered models/versions.
+# Run before tgt_model_migration_register for a fresh target state.
+# Uses serverless compute.
+
+resources:
+  jobs:
+    tgt_model_migration_cleanup:
+      name: "tgt_model_migration_cleanup — UC Model Migration"
+      description: "Clean all contents of target import volume and delete all aliases, model versions, registered models, and migration experiments."
+
+      tasks:
+        - task_key: cleanup_volume
+          notebook_task:
+            notebook_path: ../src/notebooks/07_cleanup_target_volume.ipynb
+            base_parameters:
+              target_catalog: "${var.target_catalog}"
+              target_schema: "${var.target_schema}"
+              import_volume: "${var.import_volume}"
+          environment_key: migration_env
+
+        - task_key: cleanup_models
+          depends_on:
+            - task_key: cleanup_volume
+          notebook_task:
+            notebook_path: ../src/notebooks/08_cleanup_target_models.ipynb
+            base_parameters:
+              target_catalog: "${var.target_catalog}"
+              target_schema: "${var.target_schema}"
+              model_names: "${var.model_names}"
+          environment_key: migration_env
+
+      environments:
+        - environment_key: migration_env
+          spec:
+            client: "1"
+            dependencies:
+              - scikit-learn
+              - mlflow[databricks]
+
+      queue:
+        enabled: true
+
+      permissions:
+        - level: CAN_VIEW
+          group_name: users

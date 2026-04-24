@@ -1,0 +1,42 @@
+# Target bundle for UC Model Migration.
+#
+# Public YAML — uses placeholder values. Override the variables and add your
+# workspace target in databricks.local.yml (see databricks.local.yml.example).
+#
+# Deploy:  databricks bundle deploy -p <your-profile>
+# Run:     databricks bundle run tgt_model_migration_cleanup -p <your-profile>
+#          databricks bundle run tgt_model_migration_register -p <your-profile>
+
+bundle:
+  name: uc-model-migration-tgt
+
+include:
+  - resources/*.yml
+  - "*.local.yml"
+
+variables:
+  source_catalog:
+    description: "Source UC catalog (the migration reads the export volume from here)"
+    default: "your_source_catalog"
+  target_catalog:
+    description: "Target UC catalog where models will be registered"
+    default: "your_target_catalog"
+  source_schema:
+    description: "Schema in source_catalog where the export volume lives"
+    default: "your_source_schema"
+  target_schema:
+    description: "Schema in target_catalog where the models will be registered. May be the same as or different from source_schema."
+    default: "your_target_schema"
+  model_names:
+    description: "Comma-separated list of model short names to migrate (must match the source bundle)"
+    default: "your_model_name"
+  export_volume:
+    description: "Name of the export volume in source_catalog.source_schema"
+    default: "model_exports"
+  import_volume:
+    description: "Name of the import volume in target_catalog.target_schema (created automatically if missing)"
+    default: "model_imports"
+
+targets:
+  dev:
+    default: true

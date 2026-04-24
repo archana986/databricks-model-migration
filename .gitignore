@@ -1,0 +1,18 @@
+# Databricks bundle build artifacts
+.databricks/
+
+# Local override files (per-user; never commit your workspace URL or catalog names)
+*.local.yml
+!*.local.yml.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp

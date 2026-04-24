@@ -1,0 +1,38 @@
+# Source export: export models from source catalog to export volume.
+# Never touches source registered models — read-only.
+# Run src_model_migration_cleanup first to ensure a clean export volume.
+# Uses serverless compute.
+
+resources:
+  jobs:
+    src_model_export:
+      name: "src_model_export — UC Model Migration"
+      description: "Export models from source catalog to export volume (manifest + artifacts)."
+
+      tasks:
+        - task_key: export
+          notebook_task:
+            notebook_path: ../src/notebooks/03_export.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              target_catalog: "${var.target_catalog}"
+              source_schema: "${var.source_schema}"
+              target_schema: "${var.target_schema}"
+              volume_name: "${var.export_volume}"
+              model_names: "${var.model_names}"
+          environment_key: migration_env
+
+      environments:
+        - environment_key: migration_env
+          spec:
+            client: "1"
+            dependencies:
+              - scikit-learn
+              - mlflow[databricks]
+
+      queue:
+        enabled: true
+
+      permissions:
+        - level: CAN_VIEW
+          group_name: users

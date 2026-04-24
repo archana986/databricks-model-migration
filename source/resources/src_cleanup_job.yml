@@ -1,0 +1,34 @@
+# Source cleanup: clear export volume.
+# Never touches source registered models.
+# Uses serverless compute.
+
+resources:
+  jobs:
+    src_model_migration_cleanup:
+      name: "src_model_migration_cleanup — UC Model Migration"
+      description: "Clear all contents of source export volume. Does not touch source registered models."
+
+      tasks:
+        - task_key: cleanup_export_volume
+          notebook_task:
+            notebook_path: ../src/notebooks/02_cleanup_export.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              source_schema: "${var.source_schema}"
+              volume_name: "${var.export_volume}"
+          environment_key: migration_env
+
+      environments:
+        - environment_key: migration_env
+          spec:
+            client: "1"
+            dependencies:
+              - scikit-learn
+              - mlflow[databricks]
+
+      queue:
+        enabled: true
+
+      permissions:
+        - level: CAN_VIEW
+          group_name: users

@@ -1,0 +1,80 @@
+# Target migration: transfer from source volume → import → validate.
+# Run after src_model_export completes and tgt_model_migration_cleanup has cleared the target.
+# Uses serverless compute.
+
+resources:
+  jobs:
+    tgt_model_migration_register:
+      name: "tgt_model_migration_register — UC Model Migration"
+      description: "Transfer from source export volume, import and register in target catalog, validate, and reconcile."
+
+      tasks:
+        - task_key: transfer
+          notebook_task:
+            notebook_path: ../src/notebooks/04_transfer.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              target_catalog: "${var.target_catalog}"
+              source_schema: "${var.source_schema}"
+              target_schema: "${var.target_schema}"
+              export_volume: "${var.export_volume}"
+              import_volume: "${var.import_volume}"
+          environment_key: migration_env
+
+        - task_key: import_register
+          depends_on:
+            - task_key: transfer
+          notebook_task:
+            notebook_path: ../src/notebooks/05_import.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              target_catalog: "${var.target_catalog}"
+              source_schema: "${var.source_schema}"
+              target_schema: "${var.target_schema}"
+              import_volume: "${var.import_volume}"
+              volume_catalog: "${var.target_catalog}"
+          environment_key: migration_env
+
+        - task_key: validate
+          depends_on:
+            - task_key: import_register
+          notebook_task:
+            notebook_path: ../src/notebooks/06_validate.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              target_catalog: "${var.target_catalog}"
+              source_schema: "${var.source_schema}"
+              target_schema: "${var.target_schema}"
+              import_volume: "${var.import_volume}"
+              volume_catalog: "${var.target_catalog}"
+          environment_key: migration_env
+
+        - task_key: reconciliation
+          depends_on:
+            - task_key: validate
+          notebook_task:
+            notebook_path: ../src/notebooks/09_reconciliation.ipynb
+            base_parameters:
+              source_catalog: "${var.source_catalog}"
+              target_catalog: "${var.target_catalog}"
+              source_schema: "${var.source_schema}"
+              target_schema: "${var.target_schema}"
+              import_volume: "${var.import_volume}"
+              volume_catalog: "${var.target_catalog}"
+              model_names: "${var.model_names}"
+          environment_key: migration_env
+
+      environments:
+        - environment_key: migration_env
+          spec:
+            client: "1"
+            dependencies:
+              - scikit-learn
+              - mlflow[databricks]
+
+      queue:
+        enabled: true
+
+      permissions:
+        - level: CAN_VIEW
+          group_name: users
