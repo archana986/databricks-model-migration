@@ -33,6 +33,7 @@ resources:
               target_schema: "${var.target_schema}"
               import_volume: "${var.import_volume}"
               volume_catalog: "${var.target_catalog}"
+              experiment_prefix: "${var.experiment_prefix}"
           environment_key: migration_env
 
         - task_key: validate

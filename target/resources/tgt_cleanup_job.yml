@@ -27,6 +27,7 @@ resources:
               target_catalog: "${var.target_catalog}"
               target_schema: "${var.target_schema}"
               model_names: "${var.model_names}"
+              experiment_prefix: "${var.experiment_prefix}"
           environment_key: migration_env
 
       environments:

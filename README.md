@@ -121,6 +121,7 @@ All settings are bundle variables, configured in `databricks.yml` (defaults) and
 | `model_names` | Comma-separated list of model short names (e.g. `churn_model,fraud_model`) |
 | `export_volume` | Volume name in `source_catalog.source_schema` for staging exports (default `model_exports`) |
 | `import_volume` | Volume name in `target_catalog.target_schema` for staging imports (default `model_imports`); target bundle only |
+| `experiment_prefix` | Prefix applied to the per-model migration experiment name in the target workspace. Default `migration_` (e.g. experiment `migration_churn_model`). Set to `""` to use the bare model short name (e.g. experiment `churn_model`). Target bundle only. |
 
 ## Repository layout
 

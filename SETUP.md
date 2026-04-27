@@ -66,6 +66,7 @@ Edit each `databricks.local.yml` and set:
 | `variables.model_names.default` | Comma-separated model short names (e.g. `churn_model,fraud_model`) |
 | `variables.export_volume.default` | Volume name for staging exports (default `model_exports`) |
 | `variables.import_volume.default` | Volume name for staging imports (target bundle only; default `model_imports`) |
+| `variables.experiment_prefix.default` | Prefix for the per-model migration experiment in the target (target bundle only). Default `migration_` (e.g. experiment `migration_churn_model`). Set to `""` to use the bare model short name (e.g. experiment `churn_model`). |
 | `targets.dev.workspace.profile` | Your Databricks CLI profile name |
 | `targets.dev.workspace.host` | Your workspace URL |
 
@@ -152,7 +153,7 @@ Then add a `job_clusters` section with `spark_version`, `node_type_id`, and othe
 - **Same metastore only.** Cross-metastore and cross-cloud are not supported.
 - **Source models are read-only.** No job touches source registered models, versions, aliases, or experiments.
 - **Direct grants only.** Direct UC grants on the source model are migrated. Inherited grants from the parent catalog or schema are not exported — they will inherit naturally from whatever the target schema/catalog grants. Principals that don't exist in the target metastore are skipped with a warning, not a failure.
-- **Source experiments are not copied.** The target gets a fresh `migration_<model_name>` experiment to house the re-logged versions.
+- **Source experiments are not copied.** The target gets a fresh experiment to house the re-logged versions, named `<experiment_prefix><model_name>` (default prefix `migration_`, configurable; set to `""` for `<model_name>`).
 - **Each migrated version gets a new run ID and version number** in the target. The originals are tracked via `migration.source_run_id` and `migration.source_version` tags.
 - **Target cleanup is destructive.** `tgt_model_migration_cleanup` deletes all model versions, aliases, registered model entries, the migration experiment, and import volume contents for the configured `model_names`.
 - **Volume paths only.** Uses `/Volumes/<catalog>/<schema>/<volume>/` — no DBFS or external paths.

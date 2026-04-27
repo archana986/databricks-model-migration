@@ -36,6 +36,9 @@ variables:
   import_volume:
     description: "Name of the import volume in target_catalog.target_schema (created automatically if missing)"
     default: "model_imports"
+  experiment_prefix:
+    description: "Prefix prepended to the per-model MLflow experiment that houses re-logged migration runs (e.g. 'migration_' -> /Users/<you>/migration_<model>). Set to '' to use just the model short name."
+    default: "migration_"
 
 targets:
   dev:

@@ -18,6 +18,10 @@ variables:
     default: "model_exports"
   import_volume:
     default: "model_imports"
+  # Optional: override the experiment prefix. Default in databricks.yml is "migration_".
+  # Set to "" to name the experiment exactly the model short name (e.g. /Users/<you>/weld_quality).
+  # experiment_prefix:
+  #   default: ""
 
 targets:
   dev:
