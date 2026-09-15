@@ -1,0 +1,12 @@
+########## CELL 0 ##########
+Source: /Volumes/akrishn_fe_dsa/mm_sage_src/model_exports
+Target: /Volumes/akrishn_fe_dsa/mm_sage_tgt/model_imports
+
+########## CELL 1 ##########
+
+########## CELL 2 ##########
+  akrishn_fe_dsa__mm_sage_src__pf_model/ copied
+  akrishn_fe_dsa__mm_sage_src__sk_model/ copied
+  akrishn_fe_dsa__mm_sage_src__xgb_model/ copied
+  manifest.json copied
+TRANSFERRED 3 model(s), 4 version(s)
