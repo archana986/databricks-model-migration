@@ -1,8 +1,0 @@
-########## CELL 0 ##########
-=== FINAL STATE mm_sage_tgt (after scoped cleanup) ===
-akrishn_fe_dsa.mm_sage_tgt.protectme: versions=['v1[real]'] aliases={'Champion': '1'}
-akrishn_fe_dsa.mm_sage_tgt.wipeme: versions=['v1[real]'] aliases={}
-akrishn_fe_dsa.mm_sage_tgt.sk_model: versions=['v1[migr]', 'v2[migr]'] aliases={'Champion': '2', 'Challenger': '1'}
-akrishn_fe_dsa.mm_sage_tgt.pf_model: versions=['v1[migr]'] aliases={'Champion': '1'}
-akrishn_fe_dsa.mm_sage_tgt.xgb_model: versions=['v1[migr]'] aliases={'Champion': '1'}
-[notebook exit -> OK]
