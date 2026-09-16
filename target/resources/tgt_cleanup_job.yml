@@ -28,6 +28,9 @@ resources:
               target_schema: "${var.target_schema}"
               model_names: "${var.model_names}"
               experiment_prefix: "${var.experiment_prefix}"
+              # Safe default: only delete versions the migration created. Set the
+              # require_migration_tag bundle variable to "false" for a full wipe.
+              require_migration_tag: "${var.require_migration_tag}"
           environment_key: migration_env
 
       environments:
